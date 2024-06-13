@@ -3,36 +3,37 @@
 
 
 // Tipo que define o medicamento
-typedef struct medicamento medicamento;
+typedef struct Medicamento Medicamento;
 
 // Tipo que define a lista
-typedef struct lista lista ;
+typedef struct Lista Lista ;
 
 /*Le arquivo e define o que sera realizado*/
 void le_arquivo();
 
-/* Cria um novo medicamento */
-medicamento *CriaMedicamento(FILE *arch , char *nome ,int codigo , float valor ,int *data_de_validade );
+/*Cria lista*/
+Lista *CriaLista();
 
-lista *CriaLista();
+/* Cria um novo medicamento */
+Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_validade );
 
 /* Insere um medicamento em uma lista */
-lista *InsereListaMedicamento (FILE *fp , lista *l , medicamento *m );
+Lista *InsereListaMedicamento (FILE *fp , Lista *l , Medicamento *m );
 
 /* Retira um medicamento de uma determinada lista */
-lista * RetiraListaMedicamento ( FILE * fp , lista * l , int id_medicamento );
+Lista * RetiraListaMedicamento (FILE *fp , Lista *l , int id_medicamento);
 
 /* Verifica se um medicamento está presente em uma determinada lista */
-int VerificaListaMedicamento ( FILE * fp , lista * p , int id_medicamento );
+int VerificaListaMedicamento (FILE *fp , Lista *p , int id_medicamento);
 
 /* Verifica se existe um medicamento vencido em uma determinada lista */
-int VerificaListaValidade ( FILE * fp , lista * p , int * data );
+int VerificaListaValidade (FILE *fp , Lista *p , int *data);
 
 /* Imprime todos os medicamentos de uma lista */
-void ImprimeListaMedicamentos ( FILE * fp , lista * p );
+void ImprimeListaMedicamentos (FILE *fp, Lista *p) ;
 
 /* Ordena Lista pelo valor do medicamento */
-lista *OrdenaListaValor ( lista * p );
+Lista *OrdenaListaValor (Lista *p);
 
 /* Ordena Lista pela data de vencimento do medicamento */
-lista *OrdenaListaVencimento ( lista * p );
+Lista *OrdenaListaVencimento (Lista *p);
