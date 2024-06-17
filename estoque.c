@@ -215,32 +215,9 @@ Lista *OrdenaListaValor (Lista *p){ //Bubble sort
     for(Lista *i = p; i != NULL; i = i->prox){
         for(Lista *j = p; j != NULL; j = j->prox){
             if(i->m->valor < j->m->valor){
-                //valor do medicamento
-                float val = i->m->valor;
-                i->m->valor = j->m->valor;
-                j->m->valor = val;
-                // nome do emdicamento
-                char nome[20];
-                strcpy(nome, i->m->nome);
-                strcpy(i->m->nome, j->m->nome);
-                strcpy(j->m->nome, nome);
-                //codigo do medicamento
-                int cod = i->m->codigo;
-                i->m->codigo = j->m->codigo;
-                j->m->codigo = cod;
-                //dia
-                int dia = i->m->data[0];
-                i->m->data[0] = j->m->data[0];
-                j->m->data[0] = dia;
-                //mes
-                int mes = i->m->data[1];
-                i->m->data[1] = j->m->data[1];
-                j->m->data[1] = mes;
-                //ano
-                int ano = i->m->data[2];
-                i->m->data[2] = j->m->data[2];
-                j->m->data[2] = ano;
-
+                Medicamento *aux = i->m;
+                i->m = j->m;
+                j->m = aux;
             }
         }
     }
@@ -251,87 +228,21 @@ Lista *OrdenaListaVencimento (Lista *p){ //Bubble sort
     for(Lista *i = p; i != NULL; i = i->prox){
         for(Lista *j = p; j != NULL; j = j->prox){
             if(i->m->data[2] < j->m->data[2]){ //analisa pelo ano
-                //valor do medicamento
-                float val = i->m->valor;
-                i->m->valor = j->m->valor;
-                j->m->valor = val;
-                // nome do emdicamento
-                char nome[20];
-                strcpy(nome, i->m->nome);
-                strcpy(i->m->nome, j->m->nome);
-                strcpy(j->m->nome, nome);
-                //codigo do medicamento
-                int cod = i->m->codigo;
-                i->m->codigo = j->m->codigo;
-                j->m->codigo = cod;
-                //dia
-                int dia = i->m->data[0];
-                i->m->data[0] = j->m->data[0];
-                j->m->data[0] = dia;
-                //mes
-                int mes = i->m->data[1];
-                i->m->data[1] = j->m->data[1];
-                j->m->data[1] = mes;
-                //ano
-                int ano = i->m->data[2];
-                i->m->data[2] = j->m->data[2];
-                j->m->data[2] = ano;
+                Medicamento *aux = i->m;
+                i->m = j->m;
+                j->m = aux;
             }
 
             if(i->m->data[2] == j->m->data[2] && i->m->data[1] < j->m->data[1]){//analisa o ano e mes
-                //valor do medicamento
-                float val = i->m->valor;
-                i->m->valor = j->m->valor;
-                j->m->valor = val;
-                // nome do emdicamento
-                char nome[20];
-                strcpy(nome, i->m->nome);
-                strcpy(i->m->nome, j->m->nome);
-                strcpy(j->m->nome, nome);
-                //codigo do medicamento
-                int cod = i->m->codigo;
-                i->m->codigo = j->m->codigo;
-                j->m->codigo = cod;
-                //dia
-                int dia = i->m->data[0];
-                i->m->data[0] = j->m->data[0];
-                j->m->data[0] = dia;
-                //mes
-                int mes = i->m->data[1];
-                i->m->data[1] = j->m->data[1];
-                j->m->data[1] = mes;
-                //ano
-                int ano = i->m->data[2];
-                i->m->data[2] = j->m->data[2];
-                j->m->data[2] = ano;
+                Medicamento *aux = i->m;
+                i->m = j->m;
+                j->m = aux;
             }
 
             if(i->m->data[2] == j->m->data[2] && i->m->data[1] == j->m->data[1] && i->m->data[0] < j->m->data[0] ){//analisa o ano, mes e dia
-                //valor do medicamento
-                float val = i->m->valor;
-                i->m->valor = j->m->valor;
-                j->m->valor = val;
-                // nome do emdicamento
-                char nome[20];
-                strcpy(nome, i->m->nome);
-                strcpy(i->m->nome, j->m->nome);
-                strcpy(j->m->nome, nome);
-                //codigo do medicamento
-                int cod = i->m->codigo;
-                i->m->codigo = j->m->codigo;
-                j->m->codigo = cod;
-                //dia
-                int dia = i->m->data[0];
-                i->m->data[0] = j->m->data[0];
-                j->m->data[0] = dia;
-                //mes
-                int mes = i->m->data[1];
-                i->m->data[1] = j->m->data[1];
-                j->m->data[1] = mes;
-                //ano
-                int ano = i->m->data[2];
-                i->m->data[2] = j->m->data[2];
-                j->m->data[2] = ano;
+                Medicamento *aux = i->m;
+                i->m = j->m;
+                j->m = aux;
             }
 
         }
