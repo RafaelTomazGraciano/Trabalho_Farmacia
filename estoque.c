@@ -23,26 +23,26 @@ void le_arquivo(){
     FILE *arch_entrada = fopen("entrada.txt", "r");//abre arquivo de entrada para leitura
     FILE *arch_saida = fopen("saida.txt", "w");//abre arquivo de saida para escrita
 
-    if(arch_entrada == NULL){
+    if(arch_entrada == NULL){ //verifica se o arquivo existe
         printf("O arquivo entrada.txt nao existe");
         exit(1);
     }
 
-    if(fgetc(arch_entrada) ==  EOF){
+    if(fgetc(arch_entrada) ==  EOF){ //verifica se o arquivo nao esta vazio
         printf("O arquivo esta vazio");
         exit(1);
     }
 
-    rewind(arch_entrada);
+    rewind(arch_entrada); //volta para o inicio do arquivo
 
     while (1){
-        if(feof(arch_entrada)){
+        if(feof(arch_entrada)){ //quando chega no fim do arquivo para o loop
             break;
         }
 
-        fscanf(arch_entrada, "%s", informacao);
+        fscanf(arch_entrada, "%s", informacao); //le a informacao
 
-        if(!strcmp("MEDICAMENTO", informacao)){
+        if(!strcmp("MEDICAMENTO", informacao)){ //registra medicamento
 
             fscanf(arch_entrada, "%s %d %f %d %d %d", medicamentotemp.nome, &medicamentotemp.codigo, &medicamentotemp.valor, &medicamentotemp.data[0], &medicamentotemp.data[1], &medicamentotemp.data[2]);
             med = CriaMedicamento(medicamentotemp.nome, medicamentotemp.codigo, medicamentotemp.valor, medicamentotemp.data);
@@ -50,48 +50,48 @@ void le_arquivo(){
 
         }
 
-        else if(!strcmp("RETIRA", informacao)){
+        else if(!strcmp("RETIRA", informacao)){//retira medicamento
 
             fscanf(arch_entrada, "%d", &medicamentotemp.codigo);
             lst = RetiraListaMedicamento (arch_saida , lst , medicamentotemp.codigo);
 
         }
 
-        else if(!strcmp("IMPRIME_LISTA", informacao)){
+        else if(!strcmp("IMPRIME_LISTA", informacao)){//imprime lista de medicamentos no txt
             ImprimeListaMedicamentos (arch_saida, lst);
         }
 
-        else if(!strcmp("ATUALIZA_PRECO", informacao)){
+        else if(!strcmp("ATUALIZA_PRECO", informacao)){//atualiza preco do medicamento
 
             fscanf(arch_entrada, "%d %f", &medicamentotemp.codigo, &medicamentotemp.valor);
             AtualizaPreco(arch_saida, lst, medicamentotemp.codigo, medicamentotemp.valor);
 
         }
 
-        else if (!strcmp("VERIFICA_VALIDADE", informacao)){
+        else if (!strcmp("VERIFICA_VALIDADE", informacao)){//verifica quais medicamenstos estao vencidos
             fscanf(arch_entrada, "%d %d %d", &medicamentotemp.data[0], &medicamentotemp.data[1], &medicamentotemp.data[2]);
             VerificaListaValidade(arch_saida , lst , medicamentotemp.data);
         }
 
-        else if(!strcmp("VERIFICA_LISTA", informacao)){
+        else if(!strcmp("VERIFICA_LISTA", informacao)){//registra se certo medicamento esta na lista
             fscanf(arch_entrada, "%d", &medicamentotemp.codigo);
             VerificaListaMedicamento(arch_saida, lst, medicamentotemp.codigo);
         }
 
-        else if (!strcmp("ORDENA_LISTA_VALOR", informacao)){
+        else if (!strcmp("ORDENA_LISTA_VALOR", informacao)){//ordena lista pelo valor
             lst = OrdenaListaValor (lst);
         }
 
-        else if (!strcmp("ORDENA_LISTA_VALIDADE", informacao)){
+        else if (!strcmp("ORDENA_LISTA_VALIDADE", informacao)){//ordena lista pela validade
             lst = OrdenaListaVencimento (lst);
         }
 
-        else if(!strcmp("FIM", informacao)){
+        else if(!strcmp("FIM", informacao)){ //fim do arquivo, acaba o programa
             fim(lst);
         }
 
         else{
-            fprintf(arch_saida, "INFORMACAO NAO CONHECIDA\n");
+            fprintf(arch_saida, "INFORMACAO NAO CONHECIDA\n"); //caso a informacao nao seja reconhecida
         }
     }
     
@@ -99,11 +99,11 @@ void le_arquivo(){
     fclose(arch_saida);
 }
 
-Lista *CriaLista(){
+Lista *CriaLista(){//cria lista
     return NULL;
 }
 
-Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_validade ){
+Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_validade ){//cria medicamento na struct
     Medicamento *novo = (Medicamento*) malloc(sizeof(Medicamento));
 
     strcpy(novo->nome, nome);
@@ -116,7 +116,7 @@ Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_
     return novo;
 }
 
-Lista *InsereListaMedicamento (FILE *fp , Lista *l , Medicamento *m ){
+Lista *InsereListaMedicamento (FILE *fp , Lista *l , Medicamento *m ){//cria medicamento na lista
     fprintf(fp, "MEDICAMENTO %s %d ADICIONADO\n", m->nome, m->codigo);//escreve no arquivo de saida
 
     Lista *novo = (Lista*) malloc(sizeof(Lista));//cria lista
@@ -126,7 +126,7 @@ Lista *InsereListaMedicamento (FILE *fp , Lista *l , Medicamento *m ){
     return novo;
 }
 
-Lista * RetiraListaMedicamento (FILE *fp , Lista *l , int id_medicamento){
+Lista * RetiraListaMedicamento (FILE *fp , Lista *l , int id_medicamento){//retira medicamento da lista
     Lista *ant = NULL;
     Lista *p = l;
     
@@ -154,7 +154,7 @@ Lista * RetiraListaMedicamento (FILE *fp , Lista *l , int id_medicamento){
     return l;
 }
 
-void ImprimeListaMedicamentos (FILE *fp, Lista *p){
+void ImprimeListaMedicamentos (FILE *fp, Lista *p){//imprime lista de medicamento
 
     for(Lista *aux = p; aux != NULL; aux = aux->prox){
         fprintf(fp, "%s %d %.1f %d %d %d\n", aux->m->nome, aux->m->codigo, aux->m->valor, aux->m->data[0], aux->m->data[1], aux->m->data[2]);
@@ -162,7 +162,7 @@ void ImprimeListaMedicamentos (FILE *fp, Lista *p){
 
 }
 
-void AtualizaPreco (FILE *fp, Lista *p, int id_medicamento, float preco){
+void AtualizaPreco (FILE *fp, Lista *p, int id_medicamento, float preco){//atualiza preco do medicamento
     int encontrou = 0;
     for(Lista *aux = p; aux != NULL; aux = aux->prox){
         if(aux->m->codigo == id_medicamento){
@@ -177,18 +177,18 @@ void AtualizaPreco (FILE *fp, Lista *p, int id_medicamento, float preco){
     }
 }
 
-void VerificaListaValidade (FILE *fp , Lista *p , int *data){
+void VerificaListaValidade (FILE *fp , Lista *p , int *data){// verifica quais medicamentos estao vencidos
     int encontrou = 0;
     for(Lista *aux = p; aux != NULL; aux = aux->prox){
-        if(aux->m->data[2] < data[2]){
-            fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo);
+        if(aux->m->data[2] < data[2]){//verifica ano
+            fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo);//verifica ano e mes 
             encontrou = 1;
         }
         if(aux->m->data[2] == data[2] && aux->m->data[1] < data[1]){
             fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo);
             encontrou = 1;
         }
-        if(aux->m->data[2] == data[2] && aux->m->data[1] == data[1] && aux->m->data[0] < data[0]){
+        if(aux->m->data[2] == data[2] && aux->m->data[1] == data[1] && aux->m->data[0] < data[0]){//verifica ano, mes e dia
             fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo);
             encontrou = 1;
         }
@@ -198,7 +198,7 @@ void VerificaListaValidade (FILE *fp , Lista *p , int *data){
     }
 }
 
-void VerificaListaMedicamento (FILE *fp , Lista *p , int id_medicamento){
+void VerificaListaMedicamento (FILE *fp , Lista *p , int id_medicamento){//verifica se certo medicamento esta na lista
     int encontrou = 0;
     for(Lista *aux = p; aux != NULL; aux = aux->prox){
         if(aux->m->codigo == id_medicamento){
@@ -211,7 +211,7 @@ void VerificaListaMedicamento (FILE *fp , Lista *p , int id_medicamento){
     }
 }
 
-Lista *OrdenaListaValor (Lista *p){ //Bubble sort
+Lista *OrdenaListaValor (Lista *p){ //ordena lista por valor, usando o metodo Bubble sort
     for(Lista *i = p; i != NULL; i = i->prox){
         for(Lista *j = p; j != NULL; j = j->prox){
             if(i->m->valor < j->m->valor){
@@ -224,7 +224,7 @@ Lista *OrdenaListaValor (Lista *p){ //Bubble sort
     return p;
 }
 
-Lista *OrdenaListaVencimento (Lista *p){ //Bubble sort
+Lista *OrdenaListaVencimento (Lista *p){ //ordena lista por vencimento, usando o metodo Bubble sort
     for(Lista *i = p; i != NULL; i = i->prox){
         for(Lista *j = p; j != NULL; j = j->prox){
             if(i->m->data[2] < j->m->data[2]){ //analisa pelo ano
@@ -259,4 +259,5 @@ void fim(Lista *l){
         free(p); // libera memoria apontada para p
         p = aux; // faz aponta p para o proximo
     }
+    exit(0);
 }
