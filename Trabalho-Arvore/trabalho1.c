@@ -55,11 +55,21 @@ int main() {
         }
 
         else if(!strcmp("VERIFICA_VALIDADE", informacao)){
-
+            fscanf(arch_entrada, "%d %d %d", &data[0], &data[1], &data[2]);
+            int *encontrou = 0;
+            VerificaArvoreValidade(arch_saida, arv, data, &encontrou);
+            if(encontrou == 0){
+                fprintf(arch_saida, "MEDICAMENTO VENCIDO NAO ENCONTRADO NA LISTA\n");
+            }
         }
         
         else if(!strcmp("VERIFICA_ARVORE", informacao)){
+            fscanf(arch_entrada, "%d", &codigo);
+            VerificaArvoreMedicamento(arch_saida, arv, codigo);
+        }
 
+        else if(!strcmp("FIM", informacao)){
+            fim(arv);
         }
     }
 

@@ -23,10 +23,13 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento);
 Arvore *AtualizaPreco(FILE *fp, Arvore *a, int id_medicamento, float preco);
 
 /* Verifica se um medicamento esta presente em uma determinada arvore */
-int VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento);
+void VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento);
 
 /* Verifica se existe um medicamento vencido em uma determinada arvore */
-int VerificaArvoreValidade(FILE *fp, Arvore *a , int *data);
+void VerificaArvoreValidade(FILE *fp, Arvore *a , int *data, int *encontrou);
 
 /* Imprime em ordem pelo codigo todos os medicamentos de uma arvore (em ordem )*/
 void ImprimeArvoreMedicamentos(FILE *fp, Arvore *a);
+
+/* libera memoria */
+void fim(Arvore *a);

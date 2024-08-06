@@ -37,7 +37,6 @@ Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_
 Arvore *InsereArvoreMedicamento(FILE *fp, Arvore *a , Medicamento *m){//insere medicamento na arvore
     if(a == NULL){
         a = (Arvore *) malloc(sizeof(Arvore));
-        a->m = (Medicamento *) malloc(sizeof(Medicamento));
         a->m = m;
         a->esquerda = a->direita = NULL; 
         fprintf(fp, "MEDICAMENTO %s %d ADICIONADO\n", m->nome, m->codigo);//escreve no arquivo de saida
@@ -68,7 +67,7 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
     else{//achou o no para remover
         
         //no sem filhos
-        if(a->esquerda == NULL && a->direita ==NULL){
+        if(a->esquerda == NULL && a->direita == NULL){
             fprintf(fp, "MEDICAMENTO %s %d RETIRADO\n", a->m->nome , a->m->codigo);
             free(a->m); // Liberar a memória do medicamento
             free(a);    // Liberar a memória do nó
@@ -78,7 +77,6 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
         else if(a->esquerda == NULL){
             fprintf(fp, "MEDICAMENTO %s %d RETIRADO\n", a->m->nome , a->m->codigo);
             Arvore *temp = a;
-            printf("%d", temp->m->codigo);
             a = a->direita;
             free(temp->m); // Liberar a memória do medicamento
             free(temp);    // Liberar a memória do nó
@@ -87,7 +85,6 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
         else if(a->direita == NULL){
             fprintf(fp, "MEDICAMENTO %s %d RETIRADO\n", a->m->nome , a->m->codigo);
             Arvore *temp = a;
-            printf("%d", temp->m->codigo);
             a = a->esquerda;
             free(temp->m); // Liberar a memória do medicamento
             free(temp);    // Liberar a memória do nó
@@ -98,8 +95,9 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
             while(temp->direita != NULL){
                 temp = temp->direita;
             }
-            a->m = temp->m; //troca as informacoes
-            //temp->m->codigo = id_medicamento;
+            Medicamento *med_temp = a->m; // Guardar o medicamento atual para liberar depois
+            a->m = temp->m; // Trocar as informações
+            temp->m = med_temp; // Para que o medicamento original seja removido no local correto
             a->esquerda = RetiraArvoreMedicamento(fp, a->esquerda, temp->m->codigo);
         }
     }
@@ -107,15 +105,50 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
 }
 
 Arvore *AtualizaPreco(FILE *fp, Arvore *a, int id_medicamento, float preco){
-
+    if(a == NULL){
+        fprintf(fp, "MEDICAMENTO ATUALIZAR PRECO NAO ENCONTRADO\n");
+        return NULL;
+    }
+    else if(a->m->codigo > id_medicamento){
+        a->esquerda = AtualizaPreco(fp, a->esquerda, id_medicamento, preco);
+    }
+    else if(a->m->codigo < id_medicamento){
+        a->direita = AtualizaPreco(fp, a->direita, id_medicamento, preco);
+    }
+    else{
+        a->m->valor = preco;
+        fprintf(fp, "PRECO ATUALIZADO %s %d %.2f\n", a->m->nome, a->m->codigo, a->m->valor);
+    }
+    return a;
 }
 
-int VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento){
-
+void VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento){
+    if(a == NULL){
+        fprintf(fp, "MEDICAMENTO COM CODIGO %d NAO ENCONTRADO\n", id_medicamento);
+        return;
+    }
+    else if(a->m->codigo > id_medicamento){
+        VerificaArvoreMedicamento(fp, a->esquerda, id_medicamento);
+    }
+    else if(a->m->codigo < id_medicamento){
+        VerificaArvoreMedicamento(fp, a->direita, id_medicamento);
+    }
+    else{
+        fprintf(fp, "MEDICAMENTO %s %d %.2f ENCONTRADO\n", a->m->nome, a->m->codigo, a->m->valor);
+    }
 }
 
-int VerificaArvoreValidade(FILE *fp, Arvore *a , int *data){
-
+void VerificaArvoreValidade(FILE *fp, Arvore *a, int *data, int *encontrou) {
+    if (a != NULL) {
+        if (a->m->data[2] < data[2] || 
+            (a->m->data[2] == data[2] && a->m->data[1] < data[1]) || 
+            (a->m->data[2] == data[2] && a->m->data[1] == data[1] && a->m->data[0] < data[0])) {
+            fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", a->m->nome, a->m->codigo);
+            *encontrou = 1;
+        }
+        VerificaArvoreValidade(fp, a->esquerda, data, encontrou);
+        VerificaArvoreValidade(fp, a->direita, data, encontrou);
+    }
 }
 
 void ImprimeArvoreMedicamentos(FILE *fp, Arvore *a){
@@ -123,5 +156,19 @@ void ImprimeArvoreMedicamentos(FILE *fp, Arvore *a){
         ImprimeArvoreMedicamentos(fp, a->esquerda);
         fprintf(fp, "%s %d %.1f %d %d %d\n", a->m->nome, a->m->codigo, a->m->valor, a->m->data[0], a->m->data[1], a->m->data[2]);
         ImprimeArvoreMedicamentos(fp, a->direita);
+    }
+}
+
+void fim(Arvore *a){
+    if (a != NULL) {
+        // percorre a arvore para liberar a memoria
+        fim(a->esquerda);
+        fim(a->direita);
+
+        // Libera o medicamento associado ao nó
+        free(a->m);
+
+        // Libera o nó atual
+        free(a);
     }
 }

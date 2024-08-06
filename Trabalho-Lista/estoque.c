@@ -181,10 +181,10 @@ void VerificaListaValidade (FILE *fp , Lista *p , int *data){// verifica quais m
     int encontrou = 0;
     for(Lista *aux = p; aux != NULL; aux = aux->prox){
         if(aux->m->data[2] < data[2]){//verifica ano
-            fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo);//verifica ano e mes 
+            fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo); 
             encontrou = 1;
         }
-        if(aux->m->data[2] == data[2] && aux->m->data[1] < data[1]){
+        if(aux->m->data[2] == data[2] && aux->m->data[1] < data[1]){//verifica ano e mes
             fprintf(fp, "MEDICAMENTO %s %d VENCIDO\n", aux->m->nome, aux->m->codigo);
             encontrou = 1;
         }
