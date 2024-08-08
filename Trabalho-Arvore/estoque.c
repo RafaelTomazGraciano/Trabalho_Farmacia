@@ -22,8 +22,12 @@ Arvore *CriaArvore(){
 
 
 Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_validade ){//cria medicamento na struct
-    Medicamento *novo = (Medicamento*) malloc(sizeof(Medicamento));
-
+    Medicamento *novo = (Medicamento*) malloc(sizeof(Medicamento));//aloca memoria
+    if(novo == NULL){
+        perror("Erro de alocacao de memoria!");
+        exit(1);
+    }
+    //copia os dados
     strcpy(novo->nome, nome);
     novo->codigo = codigo;
     novo->valor = valor;
@@ -37,6 +41,10 @@ Medicamento *CriaMedicamento(char *nome ,int codigo , float valor ,int *data_de_
 Arvore *InsereArvoreMedicamento(FILE *fp, Arvore *a , Medicamento *m){//insere medicamento na arvore
     if(a == NULL){
         a = (Arvore *) malloc(sizeof(Arvore));
+         if(a == NULL){
+            perror("Erro de alocacao de memoria!");
+            exit(1);
+        }
         a->m = m;
         a->esquerda = a->direita = NULL; 
         fprintf(fp, "MEDICAMENTO %s %d ADICIONADO\n", m->nome, m->codigo);//escreve no arquivo de saida
@@ -53,7 +61,7 @@ Arvore *InsereArvoreMedicamento(FILE *fp, Arvore *a , Medicamento *m){//insere m
     return a;
 }
 
-Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
+Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){//
     if(a == NULL){
         fprintf(fp, "MEDICAMENTO RETIRA NAO ENCONTRADO\n");
         return NULL;
@@ -104,7 +112,7 @@ Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){
     return a;
 }
 
-Arvore *AtualizaPreco(FILE *fp, Arvore *a, int id_medicamento, float preco){
+Arvore *AtualizaPreco(FILE *fp, Arvore *a, int id_medicamento, float preco){//busca binaria para buscar o medicamento 
     if(a == NULL){
         fprintf(fp, "MEDICAMENTO ATUALIZAR PRECO NAO ENCONTRADO\n");
         return NULL;
@@ -122,7 +130,7 @@ Arvore *AtualizaPreco(FILE *fp, Arvore *a, int id_medicamento, float preco){
     return a;
 }
 
-void VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento){
+void VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento){//busca binaria para buscar o medicamento 
     if(a == NULL){
         fprintf(fp, "MEDICAMENTO COM CODIGO %d NAO ENCONTRADO\n", id_medicamento);
         return;
@@ -139,6 +147,7 @@ void VerificaArvoreMedicamento(FILE *fp, Arvore *a , int id_medicamento){
 }
 
 void VerificaArvoreValidade(FILE *fp, Arvore *a, int *data, int *encontrou) {
+    //percorre todos os medicamentos para achar os medicamentos vencidos
     if (a != NULL) {
         if (a->m->data[2] < data[2] || 
             (a->m->data[2] == data[2] && a->m->data[1] < data[1]) || 
@@ -151,7 +160,7 @@ void VerificaArvoreValidade(FILE *fp, Arvore *a, int *data, int *encontrou) {
     }
 }
 
-void ImprimeArvoreMedicamentos(FILE *fp, Arvore *a){
+void ImprimeArvoreMedicamentos(FILE *fp, Arvore *a){//imprime os medicamentos ordenados pelo codigo
     if(a != NULL){
         ImprimeArvoreMedicamentos(fp, a->esquerda);
         fprintf(fp, "%s %d %.1f %d %d %d\n", a->m->nome, a->m->codigo, a->m->valor, a->m->data[0], a->m->data[1], a->m->data[2]);
