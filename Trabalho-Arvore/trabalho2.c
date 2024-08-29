@@ -40,35 +40,37 @@ int main() {
             med = CriaMedicamento(nome,codigo, valor, data);
             arv = InsereArvoreMedicamento(arch_saida, arv, med);
 
-        } else if (!strcmp("RETIRA", informacao)) { // retira medicamento
+        } 
+        
+        else if (!strcmp("RETIRA", informacao)) { // retira medicamento
             fscanf(arch_entrada, "%d", &codigo);
             arv = RetiraArvoreMedicamento(arch_saida, arv, codigo);
         }
 
-        else if(!strcmp("IMPRIME_ARVORE", informacao)){
+        else if(!strcmp("IMPRIME_ARVORE", informacao)){ //imprime arvore
             ImprimeArvoreMedicamentos(arch_saida, arv);
         }
 
-        else if(!strcmp("ATUALIZA_PRECO", informacao)){
+        else if(!strcmp("ATUALIZA_PRECO", informacao)){ // atualiza preco
             fscanf(arch_entrada, "%d %f", &codigo, &valor);
             AtualizaPreco(arch_saida, arv, codigo, valor);
         }
 
-        else if(!strcmp("VERIFICA_VALIDADE", informacao)){
+        else if(!strcmp("VERIFICA_VALIDADE", informacao)){ // verifica validade
             fscanf(arch_entrada, "%d %d %d", &data[0], &data[1], &data[2]);
-            int *encontrou = 0;
+            int encontrou = 0;
             VerificaArvoreValidade(arch_saida, arv, data, &encontrou);
             if(encontrou == 0){
-                fprintf(arch_saida, "MEDICAMENTO VENCIDO NAO ENCONTRADO NA LISTA\n");
+                fprintf(arch_saida, "MEDICAMENTO VENCIDO NAO ENCONTRADO NA ARVORE\n");
             }
         }
         
-        else if(!strcmp("VERIFICA_ARVORE", informacao)){
+        else if(!strcmp("VERIFICA_ARVORE", informacao)){ // verifica arvore
             fscanf(arch_entrada, "%d", &codigo);
             VerificaArvoreMedicamento(arch_saida, arv, codigo);
         }
 
-        else if(!strcmp("FIM", informacao)){
+        else if(!strcmp("FIM", informacao)){ //fim
             fim(arv);
         }
     }
