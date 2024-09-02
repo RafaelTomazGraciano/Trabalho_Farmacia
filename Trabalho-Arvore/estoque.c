@@ -61,7 +61,7 @@ Arvore *InsereArvoreMedicamento(FILE *fp, Arvore *a , Medicamento *m){//insere m
     return a;
 }
 
-Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){//
+Arvore *RetiraArvoreMedicamento(FILE *fp, Arvore *a, int id_medicamento){// retira medicamento da arvore
     if(a == NULL){
         fprintf(fp, "MEDICAMENTO RETIRA NAO ENCONTRADO\n");
         return NULL;
